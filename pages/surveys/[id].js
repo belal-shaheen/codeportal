@@ -20,7 +20,7 @@ export default function Survey({ survey, source }) {
         <p className="text-sm font-light my-4">by {survey.user_email}</p>
       </div>
       <div className="bg-yellow-50 pt-8 h-screen">
-        <div className="prose py-16 px-24">
+        <div className="prose py-10 px-24">
           <div className="mt-8 prose">
             <MDXRemote components={scope()} {...source} />
           </div>
