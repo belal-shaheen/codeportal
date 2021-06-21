@@ -15,14 +15,6 @@ import Layout from "../components/Layout";
 
 const initialState = { title: "", content: "" };
 
-const replacements = {
-  h2: ({ children, ...props }) => (
-    <h1 style={{ color: "tomato" }} {...props}>
-      {children}
-    </h1>
-  ),
-};
-
 function CreateSurvey() {
   const [survey, setSurvey] = useState(initialState);
   const [error, setError] = useState("");
@@ -64,7 +56,6 @@ function CreateSurvey() {
           setSurvey={setSurvey}
           survey={survey}
           components={components}
-          replacements={replacements}
         ></Editor>
 
         <button

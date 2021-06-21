@@ -4,10 +4,6 @@ import Image from "next/image";
 
 export const components = [
   {
-    tagname: "h1",
-    component: (props) => <h1>{props.children}</h1>,
-  },
-  {
     tagname: "Alert",
     component: Alert,
   },
