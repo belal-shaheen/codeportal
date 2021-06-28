@@ -39,7 +39,7 @@ export default function MySurveys() {
             <Link href={`/surveys/${survey.id}`}>
               <a className="text-sm mr-4 text-blue-500">View Survey</a>
             </Link>
-            <Link href={`/surveys/${survey.id}`}>
+            <Link href={`/submissions/${survey.id}`}>
               <a className="text-sm mr-4 text-blue-500">View Submissions</a>
             </Link>
             <button

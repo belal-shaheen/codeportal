@@ -8,7 +8,7 @@ import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
 // import Editor, { Plugins } from "react-markdown-editor-lite";
 import Editor from "../components/mdx-editor";
-import { components } from "../components/mdx";
+import { components } from "../components/editor";
 import Alert from "../components/alert";
 import Image from "next/image";
 import Layout from "../components/Layout";
@@ -17,7 +17,7 @@ const initialState = { title: "", content: "" };
 
 function CreateSurvey() {
   const [survey, setSurvey] = useState(initialState);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const { title, content } = survey;
   const router = useRouter();
   function onChange(e) {
@@ -25,7 +25,6 @@ function CreateSurvey() {
   }
 
   async function createNewSurvey() {
-    console.log(survey);
     if (!title) setError("Please add a title!");
     if (!content) setError("Please add content!");
     if (!title || !content) return;
@@ -42,15 +41,23 @@ function CreateSurvey() {
   return (
     <Layout>
       <div>
-        <h1 className="text-3xl font-semibold tracking-wide mt-6">
+        <h1 className="text-3xl font-semibold tracking-wide mt-4">
           Create new survey
         </h1>
-        <input
+
+        {/* <input
           onChange={onChange}
           name="title"
           placeholder="Title"
           value={survey.title}
           className="border-b pb-2 text-lg my-4 focus:outline-none w-full font-light text-gray-500 placeholder-gray-500 y-2"
+        /> */}
+        <input
+          className="pb-2 text-lg my-4 mt-5 bg-white-200 appearance-none border-4 border-2 border-red-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-200"
+          value={survey.title}
+          name="title"
+          placeholder="Title"
+          onChange={onChange}
         />
         <Editor
           setSurvey={setSurvey}
@@ -60,14 +67,16 @@ function CreateSurvey() {
 
         <button
           type="button"
-          className="mb-4 bg-indigo-200 font-extrabold mt-4 px-8 py-2 rounded-lg"
+          className="mb-4 bg-red-200  font-extrabold  px-8 py-2 rounded-lg"
           onClick={createNewSurvey}
         >
           Create Survey
         </button>
-        <div className="py-1 px-1 text-red-700">
-          <p>{error}</p>
-        </div>
+        {error ? (
+          <div className="py-1 px-1 text-red-700">
+            <p>{error}</p>
+          </div>
+        ) : null}
       </div>
     </Layout>
   );

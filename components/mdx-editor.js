@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import Toolbar from "./Toolbar";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { RecoilRoot } from "recoil";
 
 let SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
 
@@ -69,12 +70,9 @@ export default function Editor({
 
   const onChange = (value) => {
     setValue(value);
-    console.log(survey);
-    console.log(setSurvey);
     if (survey && setSurvey) {
       setSurvey({ ...survey, content: value });
     }
-    console.log(value);
   };
 
   return (

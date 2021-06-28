@@ -18,3 +18,5 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.cm-editor.cm-focused { outline: 2px solid transparent }

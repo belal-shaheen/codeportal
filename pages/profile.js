@@ -22,7 +22,9 @@ export default function AuthProfile() {
     <Layout>
       <Auth.UserContextProvider supabaseClient={supabase}>
         <Profile supabaseClient={supabase}>
-          <Auth supabaseClient={supabase} />
+          <div className="flex">
+            <Auth className="w-4" supabaseClient={supabase} />
+          </div>
         </Profile>
       </Auth.UserContextProvider>
     </Layout>
