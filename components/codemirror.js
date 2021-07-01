@@ -136,10 +136,10 @@ export default function Editor({defaultc, language, languageExt, mainEntry, acti
       console.log(update)
 
       if (update.docChanged) {
-        let newAnswers = { ...answers }; 
-        const code = update.view.viewState.state.doc.text;
-        newAnswers[name].push(code)
-        setAnswers(newAnswers);
+        // let newAnswers = { ...answers }; 
+        // const code = update.view.viewState.state.doc.text;
+        // newAnswers[name].push(code)
+        // setAnswers(newAnswers);
         setCode(code)
       }
     });
