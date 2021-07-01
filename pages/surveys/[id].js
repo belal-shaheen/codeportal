@@ -49,8 +49,6 @@ export default function Survey({ survey, source, id }) {
       <div className="bg-yellow-50 pt-10 h-screen overflow-x-auto rounded-2xl ">
         <div className="py-2 px-24 ">
           <div className="mt-8">
-            <CodeEditor />
-
             <MDXRemote components={scope()} {...source}></MDXRemote>
           </div>
           <div className="">

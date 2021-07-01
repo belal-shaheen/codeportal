@@ -3,6 +3,7 @@ import Test from "../test";
 import Input from "./Input";
 import Image from "next/image";
 import Page from "./Page";
+import Code from "./Code";
 import { SurveyLayout } from "./SurveyLayout";
 
 export const components = [
@@ -17,6 +18,10 @@ export const components = [
   {
     tagname: "Page",
     component: Page,
+  },
+  {
+    tagname: "Code",
+    component: Code,
   },
 ];
 

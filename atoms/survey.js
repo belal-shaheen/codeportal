@@ -7,7 +7,7 @@ export const survey = atom({
 
 export const answers = atom({
   key: "answers",
-  default: {},
+  default: {hello:[]},
 });
 
 export const page = atom({

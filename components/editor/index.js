@@ -1,5 +1,6 @@
 import InputField from "./Input";
 import Page from "./Page";
+import Code from "../codemirror"
 
 export const components = [
   {
@@ -9,6 +10,10 @@ export const components = [
   {
     tagname: "Page",
     component: Page,
+  },
+  {
+    tagname: "Code",
+    component: Code,
   },
 ];
 
