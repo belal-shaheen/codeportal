@@ -18,16 +18,20 @@ export default function Editor({defaultc, language, languageExt, mainEntry, acti
   const [code, setCode] = useState(defaultc || "");
   const [output, setOutput] = useState([]);
 
+  function onChange(newValue) {
+    console.log("change", newValue);
+  }
+
   const socket = io("http://localhost:4000/");
   var enc = new textEncoding.TextDecoder(); // always utf-8
 
   const [answers, setAnswers] = useRecoilState(AnswerAtom);
 
-  const onChange = (e) => {
-    let newAnswers = { ...answers };
-    newAnswers[name] = e.target.value;
-    setAnswers(newAnswers);
-  };
+  // const onChange = (e) => {
+  //   let newAnswers = { ...answers };
+  //   newAnswers[name] = e.target.value;
+  //   setAnswers(newAnswers);
+  // };
 
   socket.on("running", (msg) => {
     if (msg) {
@@ -40,6 +44,12 @@ export default function Editor({defaultc, language, languageExt, mainEntry, acti
     console.log(enc.decode(new Uint8Array(msg)))
     setOutput((currentOutput)=>[...currentOutput, enc.decode(new Uint8Array(msg))]);
   });
+
+  socket.on("error", (msg) => {
+    console.log(enc.decode(new Uint8Array(msg)))
+    setOutput((currentOutput)=>[...currentOutput, enc.decode(new Uint8Array(msg))]);
+  });
+
 
   useEffect(() => {
 
@@ -131,15 +141,14 @@ export default function Editor({defaultc, language, languageExt, mainEntry, acti
   //
   //
 
+  //
+
   useEffect(() => {
     let updateListenerExtension = EditorView.updateListener.of((update) => {
       console.log(update)
 
       if (update.docChanged) {
-        // let newAnswers = { ...answers }; 
-        // const code = update.view.viewState.state.doc.text;
-        // newAnswers[name].push(code)
-        // setAnswers(newAnswers);
+        const code = update.view.viewState.state.doc.text;
         setCode(code)
       }
     });
@@ -175,10 +184,10 @@ export default function Editor({defaultc, language, languageExt, mainEntry, acti
 
   return (
     <div className=" border-red-200 border-4 rounded-lg">
-      <div
+      {/* <div
         className="flex-1 rounded-sm focus:outline-none outline-none	"
         ref={editor}
-      ></div>
+      ></div> */}
       <div className="p-4 relative flex-1 rounded-sm  bg-gradient-to-r from-indigo-300 to-purple-400 overflow-x-auto h-full			">
         <p>Output: {output.join("")}</p>
         <div className="" style={{height:"450px"}}>

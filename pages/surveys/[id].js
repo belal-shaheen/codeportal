@@ -13,7 +13,11 @@ import {
 } from "../../atoms/survey";
 import { useEffect } from "react";
 import React from "react";
-import CodeEditor from "../../components/codemirror";
+import dynamic from 'next/dynamic'
+
+const AceEditor = dynamic(() => import('react-ace'), {
+    ssr: false
+  });
 
 export default function Survey({ survey, source, id }) {
   const router = useRouter();
