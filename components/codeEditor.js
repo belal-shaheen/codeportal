@@ -77,7 +77,14 @@ const TextEditor = ({
       // console.log(enc.decode(new Uint8Array(msg)));
       setOutput((currentOutput) => [...currentOutput, msg]);
     });
-    socket.on("close", () => {
+
+    return () => {
+      socket.removeListener();
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("close", function() {
       // if (msg) {
       //   console.log("Hello");
       //   setOutput([]);
@@ -95,16 +102,10 @@ const TextEditor = ({
         newAnswers[name] = [[newDate,output, code]]
       else
         newAnswers[name] = [...newAnswers[name], [newDate,output, code]]
-      console.log("yesss")
-      console.log([...newAnswers[name], [newDate,output, code]])
-      console.log([[newDate,output, code]])
+
       setLoading(false);
     });
-
-    return () => {
-      socket.removeListener();
-    };
-  }, []);
+  }, [code, output])
 
   const sessid = v4();
 
@@ -149,7 +150,7 @@ const TextEditor = ({
       >
         <button
           onClick={start}
-          className="absolute z-10	 top-3 right-3 bg-indigo-400 text-yellow-50 active:bg-indigo-600 font-bold uppercase text-xs px-2 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          className="absolute z-10	 top-3 right-3 bg-indigo-400 active:bg-indigo-600 font-bold uppercase text-xs px-2 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         >
           {loading ? (
             <span className="flex h-6 w-6 relative">
@@ -174,6 +175,7 @@ const TextEditor = ({
         <div className="relative flex-1 rounded-sm  overflow-x-auto	">
           {/* <OutputDiv code={output} /> */}
           <XTerm
+            options={{scrollOnWrite: true}}
             cols={80}
             rows={24}
             onData={(input) => {

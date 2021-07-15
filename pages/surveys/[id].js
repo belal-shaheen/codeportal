@@ -35,11 +35,24 @@ export default function Survey({ survey, source, id }) {
   };
 
   async function submitAnswers() {
-    const { data } = await supabase
-      .from("submissions")
-      .insert([{ survey_id: id, answers: answerState }])
-      .single();
-    router.push(`/thanks`);
+    try {
+      console.log(answerState)
+      const body = { surveyId: id, answers: JSON.stringify(answerState) };
+      await fetch("/api/submission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      await router.push("/thanks");
+    } catch (error) {
+      console.error(error);
+    }
+
+    // const { data } = await supabase
+    //   .from("submissions")
+    //   .insert([{ survey_id: id, answers: answerState }])
+    //   .single();
+    // router.push(`/thanks`);
   }
 
   return (
@@ -48,7 +61,6 @@ export default function Survey({ survey, source, id }) {
         <h1 className="text-5xl mt-4 font-semibold tracking-wide">
           {survey.title}
         </h1>
-        <p className="text-sm font-light my-4">by {survey.user_email}</p>
       </div>
       <div className="bg-yellow-50 pt-10 h-screen overflow-x-auto rounded-2xl ">
         <div className="py-2 px-24 ">
@@ -90,30 +102,52 @@ export default function Survey({ survey, source, id }) {
   );
 }
 
-export async function getStaticPaths() {
-  const { data, error } = await supabase.from("surveys").select("id");
-  const paths = data.map((survey) => ({
-    params: { id: JSON.stringify(survey.id) },
-  }));
-  return {
-    paths,
-    fallback: true,
-  };
-}
+// export async function getStaticPaths() {
+//   const { data, error } = await supabase.from("surveys").select("id");
+//   const paths = data.map((survey) => ({
+//     params: { id: JSON.stringify(survey.id) },
+//   }));
+//   return {
+//     paths,
+//     fallback: true,
+//   };
+// }
 
-export async function getStaticProps({ params }) {
-  const { id } = params;
-  const { data } = await supabase
-    .from("surveys")
-    .select()
-    .filter("id", "eq", id)
-    .single();
+// export async function getStaticProps({ params }) {
+//   const { id } = params;
+//   const { data } = await supabase
+//     .from("surveys")
+//     .select()
+//     .filter("id", "eq", id)
+//     .single();
+//   const mdxSource = await serialize(data.content);
+//   return {
+//     props: {
+//       id: id,
+//       source: mdxSource,
+//       survey: data,
+//     },
+//   };
+// }
+
+export const getServerSideProps = async ({ params }) => {
+  const data = await prisma.survey.findUnique({
+    where: {
+      id: Number(params?.id) || -1,
+    },
+    include: {
+      author: {
+        select: { name: true, email: true },
+      },
+    },
+  });
   const mdxSource = await serialize(data.content);
+
   return {
     props: {
-      id: id,
-      source: mdxSource,
+      id: params.id,
       survey: data,
-    },
+      source: mdxSource
+    }
   };
-}
+};

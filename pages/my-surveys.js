@@ -2,25 +2,30 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "../api";
 import Layout from "../components/Layout";
+import prisma from "./../lib/prisma";
+import { useSession, getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
-export default function MySurveys() {
-  const [surveys, setSurveys] = useState([]);
-  useEffect(() => {
-    fetchSurveys();
-  }, []);
+export default function MySurveys({ surveys }) {
+  // async function deleteSurvey(id) {
+  //   await supabase.from("surveys").delete().match({ id });
+  //   fetchSurveys();
+  // }
+  const router = useRouter();
 
-  async function fetchSurveys() {
-    const user = supabase.auth.user();
-    const { data } = await supabase
-      .from("surveys")
-      .select("*")
-      .filter("user_id", "eq", user.id);
-    setSurveys(data);
-  }
   async function deleteSurvey(id) {
-    await supabase.from("surveys").delete().match({ id });
-    fetchSurveys();
+    await fetch(`http://localhost:3000/api/survey/${id}`, {
+      method: 'DELETE',
+    });
+
+    refreshData()
   }
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
+
+
   return (
     <Layout>
       <div>
@@ -29,10 +34,7 @@ export default function MySurveys() {
         </h1>
         {surveys.map((survey, index) => (
           <div key={index} className="border-b border-gray-300	mt-8 pb-4">
-            <h2 className="text-xl font-semibold">{survey.title}</h2>
-            <p className="text-gray-500 mt-2 mb-2">
-              Author: {survey.user_email}
-            </p>
+            <h2 className="text-xl font-semibold mb-2">{survey.title}</h2>
             <Link href={`/edit-survey/${survey.id}`}>
               <a className="text-sm mr-4 text-blue-500">Edit Survey</a>
             </Link>
@@ -54,3 +56,24 @@ export default function MySurveys() {
     </Layout>
   );
 }
+
+export const getServerSideProps = async ({ req, res }) => {
+  const session = await getSession({ req });
+  if (!session) {
+    res.statusCode = 403;
+    return { props: { surveys: [] } };
+  }
+
+  const surveys = await prisma.survey.findMany({
+    where: {
+      author: { email: session.user.email },
+    },
+    include: {
+      author: {
+        select: { name: true },
+      },
+    },
+  });
+
+  return { props: { surveys } };
+};

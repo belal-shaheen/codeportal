@@ -12,6 +12,7 @@ import { components } from "../components/editor";
 import Alert from "../components/alert";
 import Image from "next/image";
 import Layout from "../components/Layout";
+import { getSession } from "next-auth/client";
 
 const initialState = { title: "", content: "" };
 
@@ -28,14 +29,28 @@ function CreateSurvey() {
     if (!title) setError("Please add a title!");
     if (!content) setError("Please add content!");
     if (!title || !content) return;
-    const user = supabase.auth.user();
-    const id = uuid();
-    survey.id = id;
-    const { data } = await supabase
-      .from("surveys")
-      .insert([{ title, content, user_id: user.id, user_email: user.email }])
-      .single();
-    router.push(`/surveys/${data.id}`);
+    try {
+      const body = { title, content };
+      await fetch("/api/survey", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      await router.push("/my-surveys");
+    } catch (error) {
+      console.error(error);
+    }
+
+    // const user = supabase.auth.user();
+    // // const id = uuid();
+    // // survey.id = id;
+    // const session = await get
+
+    // const { data } = await supabase
+    //   .from("surveys")
+    //   .insert([{ title, content, user_id: user.id, user_email: user.email }])
+    //   .single();
+    // router.push(`/surveys/${data.id}`);
   }
 
   return (

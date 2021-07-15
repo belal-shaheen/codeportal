@@ -193,7 +193,7 @@ export default function Editor({defaultc, language, languageExt, mainEntry, acti
         <div className="" style={{height:"450px"}}>
           <button
             onClick={start}
-            className="absolute bottom-3 right-3 bg-indigo-400 text-yellow-50 active:bg-indigo-600 font-bold uppercase text-xs px-2 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            className="absolute bottom-3 right-3 bg-indigo-400 active:bg-indigo-600 font-bold uppercase text-xs px-2 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

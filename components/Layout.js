@@ -1,20 +1,26 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "../api";
+import { useRouter } from 'next/router';
+import { signOut, useSession } from 'next-auth/client';
 
 export default function Layout({ children }) {
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(checkUser);
-    checkUser();
-    return () => {
-      authListener?.unsubscribe();
-    };
-  }, []);
-  function checkUser() {
-    const user = supabase.auth.user();
-    setUser(user);
-  }
+  // const [user, setUser] = useState(null);
+  const [session, loading] = useSession();
+
+  // useEffect(() => {
+  //   const { data: authListener } = supabase.auth.onAuthStateChange(checkUser);
+  //   checkUser();
+  //   return () => {
+  //     authListener?.unsubscribe();
+  //   };
+  // }, []);
+
+
+  // function checkUser() {
+  //   const user = supabase.auth.user();
+  //   setUser(user);
+  // }
 
   return (
     <div className="">
@@ -23,12 +29,12 @@ export default function Layout({ children }) {
           <Link href="/">
             <span className="mr-6 cursor-pointer">Home</span>
           </Link>
-          {user && (
+          {session && (
             <Link href="/create-survey">
               <span className="mr-6 cursor-pointer">Create Survey</span>
             </Link>
           )}
-          {user && (
+          {session && (
             <Link href="/my-surveys">
               <span className="mr-6 cursor-pointer">My Surveys</span>
             </Link>
@@ -38,7 +44,7 @@ export default function Layout({ children }) {
           </Link>
         </nav>
       </div>
-      <div className="bg-yellow-50 h-screen overflow-x-auto ">
+      <div className=" h-screen overflow-x-auto ">
         <div className="py-8 px-16 ">{children}</div>
       </div>
     </div>
