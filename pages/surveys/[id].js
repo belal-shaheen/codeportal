@@ -14,6 +14,7 @@ import {
 import { useEffect } from "react";
 import React from "react";
 import dynamic from "next/dynamic";
+import prisma from "../../lib/prisma";
 
 const AceEditor = dynamic(() => import("react-ace"), {
   ssr: false,
@@ -130,7 +131,7 @@ export const getServerSideProps = async ({ params }) => {
       },
     },
   });
-  const mdxSource = await serialize("data.content");
+  const mdxSource = await serialize(data.content);
   return {
     props: {
       id: params.id,
