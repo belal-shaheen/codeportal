@@ -13,11 +13,11 @@ import {
 } from "../../atoms/survey";
 import { useEffect } from "react";
 import React from "react";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 
-const AceEditor = dynamic(() => import('react-ace'), {
-    ssr: false
-  });
+const AceEditor = dynamic(() => import("react-ace"), {
+  ssr: false,
+});
 
 export default function Survey({ survey, source, id }) {
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function Survey({ survey, source, id }) {
 
   async function submitAnswers() {
     try {
-      console.log(answerState)
+      console.log(answerState);
       const body = { surveyId: id, answers: JSON.stringify(answerState) };
       await fetch("/api/submission", {
         method: "POST",
@@ -102,17 +102,6 @@ export default function Survey({ survey, source, id }) {
   );
 }
 
-// export async function getStaticPaths() {
-//   const { data, error } = await supabase.from("surveys").select("id");
-//   const paths = data.map((survey) => ({
-//     params: { id: JSON.stringify(survey.id) },
-//   }));
-//   return {
-//     paths,
-//     fallback: true,
-//   };
-// }
-
 // export async function getStaticProps({ params }) {
 //   const { id } = params;
 //   const { data } = await supabase
@@ -141,13 +130,12 @@ export const getServerSideProps = async ({ params }) => {
       },
     },
   });
-  const mdxSource = await serialize(data.content);
-
+  const mdxSource = await serialize("data.content");
   return {
     props: {
       id: params.id,
       survey: data,
-      source: mdxSource
-    }
+      source: mdxSource,
+    },
   };
 };
