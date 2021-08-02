@@ -1,26 +1,12 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "../api";
-import { useRouter } from 'next/router';
-import { signOut, useSession } from 'next-auth/client';
+import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/client";
 
 export default function Layout({ children }) {
   // const [user, setUser] = useState(null);
   const [session, loading] = useSession();
-
-  // useEffect(() => {
-  //   const { data: authListener } = supabase.auth.onAuthStateChange(checkUser);
-  //   checkUser();
-  //   return () => {
-  //     authListener?.unsubscribe();
-  //   };
-  // }, []);
-
-
-  // function checkUser() {
-  //   const user = supabase.auth.user();
-  //   setUser(user);
-  // }
 
   return (
     <div className="">
@@ -39,9 +25,16 @@ export default function Layout({ children }) {
               <span className="mr-6 cursor-pointer">My Surveys</span>
             </Link>
           )}
-          <Link href="/profile">
-            <span className="mr-6 cursor-pointer">Profile</span>
-          </Link>
+          {session && (
+            <Link href="/api/auth/signout">
+              <span className="mr-6 cursor-pointer  ">Sign Out</span>
+            </Link>
+          )}
+          {!session && (
+            <Link href="/api/auth/signin">
+              <span className="mr-6 cursor-pointer">Sign In</span>
+            </Link>
+          )}
         </nav>
       </div>
       <div className=" h-screen overflow-x-auto ">
